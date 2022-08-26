@@ -3,6 +3,7 @@ const signupTemplate = document.getElementById('signup_template');
 const loginTemplate = document.getElementById('login_template');
 const manageTemplate = document.getElementById('manage_template');
 const welcomeTemplate = document.getElementById('welcome_template');
+const addClientsTemp = document.getElementById('add_clients');
 
 // Get nested templates
 const clientsListTemp = document.getElementById('list_template');
@@ -17,9 +18,24 @@ const switchCurrentTemp = (template) => {
     currentTemplate = template;
 };
 
+// Clear fields
+const allInputs = document.getElementsByTagName('input');
+
+const clearAllFields = () => {
+    for (let input of allInputs) {
+        input.value = '';
+    };
+};
+
+// Get token
+const getToken = () => {
+    return localStorage.getItem('token');
+};
+
 // Display templates
 const display = (element, value) => {
     element.style.display = value;
+    clearAllFields();
 };
 
 // animation utils
@@ -31,7 +47,7 @@ const animationTime = (element, mode, time) => {
     });
 };
 
-// animations
+// animations template
 const fade = async (element, mode, time) => {
     element.style.transition = `all ${time}s`;
     if (mode !== 'none') {
@@ -88,15 +104,6 @@ const buttonIsSession = (boolean) => {
     btnToLogoutNav.style.display = boolean ? 'block' : 'none';
 };
 
-// Clear fields
-const allInputs = document.getElementsByTagName('input');
-
-const clearAllFields = () => {
-    for (let input of allInputs) {
-        input.value = '';
-    };
-};
-
 // api
 const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1';
 
@@ -126,7 +133,7 @@ const request = async (url, method, data, action, token) => {
 
 // Verify token
 const verifyToken = async () => {
-    const token = localStorage.getItem('token');
+    const token = getToken();
 
     if (token) {
         const result = await request(
@@ -134,7 +141,7 @@ const verifyToken = async () => {
             'get',
             null,
             null,
-            localStorage.getItem('token')
+            token
         );
 
         if (result.status === 'success') {
@@ -163,7 +170,6 @@ const signupData = () => {
 const signupAction = () => {
     fade(signupTemplate, 'none', 2);
     fade(loginTemplate, 'flex', 2);
-    clearAllFields();
 };
 
 signupButton.addEventListener('click', () => {
@@ -187,7 +193,6 @@ const loginActions = () => {
     fade(loginTemplate, 'none', 2);
     fade(manageTemplate, 'grid', 2);
     buttonIsSession(true);
-    clearAllFields();
 };
 
 loginButton.addEventListener('click', async () => {
@@ -195,25 +200,59 @@ loginButton.addEventListener('click', async () => {
     localStorage.setItem('token', token.token);
 });
 
-// CLIENTS list Ejecute
+// CLIENTS list Ejecute ---- ↓↓↓ get clients
 const getClientsData = () => {
     userId
 };
 
 const getClients = async () => {
-    const token = localStorage.getItem('token');
+    const token = getToken();
 
     const response = await request(`${apiUrl}/clients`, 'get', null, null, token);
 
-    console.log(response);
+    return response;
 };
 
-getClients()
+// Add clients
+const clientDi = document.getElementById('add_DI');
+const clientName = document.getElementById('add_name');
+const clientLastname = document.getElementById('add_lastname');
+const clientBirthday = document.getElementById('add_birthday');
+const clientEmail = document.getElementById('add_email');
+const addButton = document.getElementById('btn_add');
 
+const addClientsData = () => {
+    const data = {
+        DI: clientDi.value,
+        name: clientName.value,
+        lastname: clientLastname.value,
+        birthday: clientBirthday.value,
+        email: clientEmail.value
+    };
+    return data;
+};
 
+const addActions = () => {
+    fade(currentTemplate, 'none', 1);
+    fade(manageTemplate, 'grid', 2);
+};
+
+addButton.addEventListener('click', async () => {
+    const token = getToken();
+
+    const response = await request(
+        `${apiUrl}/clients`,
+        'post',
+        addClientsData,
+        addActions,
+        token
+    );
+
+    console.log(response);
+});
 
 // ------------------------------------------------------------------
 
-display(currentTemplate, 'flex');
+display(addClientsTemp, 'flex');
 
 verifyToken();

@@ -28,6 +28,30 @@
 
         <div class="console" id="console">
 
+            <!-- Add client -->
+            <div id="add_clients">
+                
+                <div id="inputs_add">
+                    <label for="add_DI">DI</label>
+                    <input type="number" id="add_DI">
+
+                    <label for="add_name">Name</label>
+                    <input type="text" id="add_name">
+
+                    <label for="add_lastname">Lastname</label>
+                    <input type="text" id="add_lastname">
+
+                    <label for="add_birthday">Birthday</label>
+                    <input type="date" id="add_birthday">
+
+                    <label for="add_email">Email</label>
+                    <input type="email" id="add_email">
+
+                    <button id="btn_add">Add</button>
+                </div>
+
+            </div>
+
             <!-- manage -->
             <div class="manager" id="manage_template">
 
@@ -46,7 +70,7 @@
 
             <!-- Welcome -->
             <div class="welcome" id="welcome_template">
-                <h2>Welcome, login to manage your customer.</h2>
+                <h2>Welcome, login to manage your customers.</h2>
                 <button id="btn_way-login">Login</button>
                 <p>You dont have an acount?</p>
                 <button id="btn_way-singup">Sign up</button>
@@ -69,9 +93,9 @@
             <div id="signup_template">
                 <div id="inputs_signup">
                     <label for="username">Username</label>
-                    <input type="username" name="username" id="signup_username">
+                    <input type="text" name="username" id="signup_username">
                     <label for="email">Email</label>
-                    <input type="emailv" name="email" id="signup_email">
+                    <input type="email" name="email" id="signup_email">
                     <label for="password">Password</label>
                     <input type="password" name="password" id="signup_password">
                     <button id="signup_button" class="btn_submit" type="submit">Signup</button>

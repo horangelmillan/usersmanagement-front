@@ -141,3 +141,22 @@ nav > ul > li #btn_nav_way-logout {
     font-size: 20px;
     width: 10rem;
 }
+
+/* Add */
+#add_clients {
+    display: none;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+#inputs_add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#inputs_add input {
+    margin-bottom: 1rem;
+}
