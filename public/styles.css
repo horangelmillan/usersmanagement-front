@@ -90,7 +90,7 @@ nav > ul > li #btn_nav_way-logout {
     justify-content: center;
 }
 
-.list h3,
+#list h3,
 .details h3 {
     font-family: 'Jost';
     text-align: center;

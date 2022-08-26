@@ -1,8 +1,12 @@
-// Templates gets
+// Get templates
 const signupTemplate = document.getElementById('signup_template');
 const loginTemplate = document.getElementById('login_template');
-const manageTemplate = document.getElementById('manage');
-const welcomeTemplate = document.getElementById('welcome');
+const manageTemplate = document.getElementById('manage_template');
+const welcomeTemplate = document.getElementById('welcome_template');
+
+// Get nested templates
+const clientsListTemp = document.getElementById('list_template');
+const clientDetailsTemp = document.getElementById('details_template');
 
 // Current template
 let currentTemplate = welcomeTemplate;
@@ -29,7 +33,7 @@ const animationTime = (element, mode, time) => {
 
 // animations
 const fade = async (element, mode, time) => {
-    element.style.transition = `all ${time}s`
+    element.style.transition = `all ${time}s`;
     if (mode !== 'none') {
         await animationTime(element, mode, time);
         switchCurrentTemp(element);
@@ -77,7 +81,6 @@ btnToLogoutNav.addEventListener('click', () => {
     fade(welcomeTemplate, 'flex', 2);
     buttonIsSession(false);
 });
-
 // Buttons mod session
 const buttonIsSession = (boolean) => {
     btnToLoginNav.style.display = boolean ? 'none' : 'block';
@@ -191,6 +194,23 @@ loginButton.addEventListener('click', async () => {
     const token = await request(`${apiUrl}/users/login`, 'post', loginData, loginActions);
     localStorage.setItem('token', token.token);
 });
+
+// CLIENTS list Ejecute
+const getClientsData = () => {
+    userId
+};
+
+const getClients = async () => {
+    const token = localStorage.getItem('token');
+
+    const response = await request(`${apiUrl}/clients`, 'get', null, null, token);
+
+    console.log(response);
+};
+
+getClients()
+
+
 
 // ------------------------------------------------------------------
 
