@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../src/images/user-managemen-icon1.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost&family=Red+Hat+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <title>Clients Management</title>
+</head>
+
+<body>
+
+    <nav>
+        <h1>Users Management</h1>
+        <ul>
+            <li><a id="btn_nav_way-login">Login</a></li>
+            <li><a id="btn_nav_way-singup">Sign Up</a></li>
+            <li><a id="btn_nav_way-logout">Log Out</a></li>
+        </ul>
+    </nav>
+
+    <div class="layout">
+
+        <div class="console" id="console">
+
+            <!-- manage -->
+            <div class="manager" id="manage">
+                <div class="list">
+                    <h3>List</h3>
+                    <div id="list-clients"></div>
+                </div>
+                <div class="details">
+                    <h3>Details</h3>
+                    <div id="details-client"></div>
+                </div>
+            </div>
+
+            <!-- Welcome -->
+            <div class="welcome" id="welcome">
+                <h2>Welcome, login to manage your customer.</h2>
+                <button id="btn_way-login">Login</button>
+                <p>You dont have an acount?</p>
+                <button id="btn_way-singup">Sign up</button>
+            </div>
+
+            <!-- login -->
+            <div id="login_template">
+
+                <div class="inputs-login">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="login_email">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="login_password">
+                    <button id="login_button" class="btn_submit" type="submit">Login</button>
+                </div>
+
+            </div>
+
+            <!-- signup -->
+            <div id="signup_template">
+                <div id="inputs_signup">
+                    <label for="username">Username</label>
+                    <input type="username" name="username" id="signup_username">
+                    <label for="email">Email</label>
+                    <input type="emailv" name="email" id="signup_email">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="signup_password">
+                    <button id="signup_button" class="btn_submit" type="submit">Signup</button>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <script src="../src/app.js"></script>
+</body>
+
+</html>
