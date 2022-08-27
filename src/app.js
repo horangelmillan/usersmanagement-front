@@ -4,12 +4,42 @@ const loginTemplate = document.getElementById('login_template');
 const manageTemplate = document.getElementById('manage_template');
 const welcomeTemplate = document.getElementById('welcome_template');
 const addClientsTemp = document.getElementById('add_clients');
-
+const editClientsTemp = document.getElementById('edit_clients');
 // Get nested templates
 const clientsListTemp = document.getElementById('list_template');
 const clientDetailsTemp = document.getElementById('details_template');
+const detailButtonTemp = document.getElementById('detail_buttons');
 
-// Current template
+// api
+const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1';
+
+// Request logic
+const request = async (url, method, data, action, token) => {
+    let catchData;
+
+    console.log(token, '--- from request');
+
+    await fetch(url, {
+        method: method,
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            "Access-Control-Allow-Methods": 'patch'
+        },
+        body: data && JSON.stringify(data())
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                action && action(data);
+            };
+            catchData = data;
+        });
+    return catchData;
+};
+
+// Current template - use to determine which template is current
 let currentTemplate = welcomeTemplate;
 
 // Swithc current template
@@ -32,6 +62,151 @@ const getToken = () => {
     return localStorage.getItem('token');
 };
 
+// CLIENTS list Ejecute ---- ↓↓↓ get clients
+const listClients = document.getElementById('list_clients');
+
+const getClientsAction = (data) => {
+
+    listClients.innerHTML = '';
+
+    const clients = data.clients;
+
+    // extract clients one by one
+    clients.forEach(client => {
+
+        const listItem = document.createElement('li');
+
+        client.birthday = new Date(client.birthday);
+
+        client.birthday = client.birthday.toDateString();
+
+        listItem.innerHTML = `
+            <p><b>DI: </b>${client.DI}</p>
+            <p><b>Full Name: </b>${client.name} ${client.lastname}</p>
+            <p><b>Birthday: </b>${client.birthday}</p>
+            <p><b>Email: </b>${client.email}</p>
+            ${client.phonenumberOne ? `<p><b>Phone N°.1: </b>${client.phonenumberOne}</p>` : ''}
+            ${client.phonenumberTwo ? `<p><b>Phone N°.2: </b>${client.phonenumberTwo}</p>` : ''}
+
+            ${client.addressOne ? `<p><b>Address N°.1: </b>${client.addressOne}</p>` : ''}
+            ${client.addressTwo ? `<p><b>Address N°.2: </b>${client.addressTwo}</p>` : ''}
+
+            <div>
+                <button class="detail_button-list" data-detail="${client.id}">Details</button>
+                <button class="edit_button-list" data-edit="${client.id}">Edit</button>
+                <button class="delete_button-list" data-delete="${client.id}">Delete</button>
+            </div>
+        `;
+
+        listClients.appendChild(listItem);
+    });
+
+};
+
+const getClients = async () => {
+    const token = getToken();
+
+    const response = await request(`${apiUrl}/clients`, 'get', null, getClientsAction, token);
+
+    return response;
+};
+
+// DELETE clients
+const deleteClient = async (id) => {
+    const token = getToken();
+
+    const result = request(`${apiUrl}/clients/${id}`, 'delete', null, null, token);
+
+    console.log(result);
+};
+
+document.addEventListener('click', async (e) => {
+    if (e.target.className === 'delete_button-list') {
+        const id = e.target.dataset.delete;
+
+        const token = getToken();
+
+        await request(`${apiUrl}/clients/${id}`, 'delete', null, getClients, token);
+
+        console.log('deleted', id)
+    };
+});
+
+// DETAILS show client
+document.addEventListener('click', async (e) => {
+    if (e.target.className === 'detail_button-list') {
+
+        const token = getToken();
+
+        const id = e.target.dataset.detail;
+
+        console.log(id);
+
+        await request(`${apiUrl}/clients/${id}`, 'get', null, null, token);
+    };
+});
+
+
+// EDIT clients
+const clntEditName = document.getElementById('add_name');
+const clntEditLastname = document.getElementById('add_lastname');
+const clntEditEmail = document.getElementById('add_email');
+const clntEditPhoneOne = document.getElementById('add_phonenumberOne');
+const clntEditPhoneTwo = document.getElementById('add_phonenumberTwo');
+const clntEditaddOne = document.getElementById('add_addressOne');
+const clntEditaddTwo = document.getElementById('add_addressTwo');
+const editBtnCancel = document.getElementById('add_cancel');
+
+let currentDetail;
+
+const editClientsData = () => {
+    const data = {
+        name: clntEditName.value != '' ? clntEditName.value : undefined,
+        lastname: clntEditLastname.value != '' ? clntEditLastname.value : undefined,
+        email: clntEditEmail.value != '' ? clntEditEmail.value : undefined,
+        addressOne: clntEditPhoneOne.value != '' ? clntEditPhoneOne.value : undefined,
+        addressTwo: clntEditPhoneTwo.value != '' ? clntEditPhoneTwo.value : undefined,
+        phonenumberOne: clntEditaddOne.value != '' ? clntEditaddOne.value : undefined,
+        phonenumberTwo: clntEditaddTwo.value != '' ? clntEditaddTwo.value : undefined,
+    };
+    return data;
+};
+
+const editActions = () => {
+    fade(currentTemplate, 'none', 1);
+    fade(manageTemplate, 'grid', 2);
+};
+
+const editClients = async (id) => {
+    const token = getToken();
+
+    console.log(token)
+
+    const response = await request(
+        `${apiUrl}/clients/${id}`,
+        'patch',
+        editClientsData,
+        editActions,
+        token
+    );
+
+    console.log(response);
+};
+
+const editButton = document.getElementById('btn_edit');
+
+editButton.addEventListener('click', () => {
+    editClients(currentDetail);
+});
+
+document.addEventListener('click', async (e) => {
+    if (e.target.className === 'edit_button-list') {
+        fade(currentTemplate, 'none', 1);
+        fade(editClientsTemp, 'flex', 2)
+        currentDetail = e.target.dataset.edit;
+    };
+});
+
 // Display templates
 const display = (element, value) => {
     element.style.display = value;
@@ -49,86 +224,28 @@ const animationTime = (element, mode, time) => {
 
 // animations template
 const fade = async (element, mode, time) => {
+    // set transition times from argument
     element.style.transition = `all ${time}s`;
+    // execute actions depending of display mode
     if (mode !== 'none') {
+        // function return promise to use async functions
         await animationTime(element, mode, time);
+        // change the current template when there are transitions template
         switchCurrentTemp(element);
         element.style.opacity = 0;
+        // wait for element animation of current element to finish for execute actions
         setTimeout(() => {
+
             element.style.opacity = 1;
+            if (element === manageTemplate) {
+                getClients();
+            };
         }, time);
     } else {
+        // else there are mode same diferent to 'none' execute an simple animation.
         element.style.opacity = 0;
         await animationTime(element, mode, time);
     };
-};
-
-// Ways Button
-const buttonToLogin = document.getElementById('btn_way-login');
-const buttonToSignin = document.getElementById('btn_way-singup');
-const btnToLoginNav = document.getElementById('btn_nav_way-login');
-const btnToSigninNav = document.getElementById('btn_nav_way-singup');
-const btnToLogoutNav = document.getElementById('btn_nav_way-logout');
-
-// actions button ways
-buttonToLogin.addEventListener('click', () => {
-    fade(currentTemplate, 'none', 1);
-    fade(loginTemplate, 'flex', 2);
-});
-
-buttonToSignin.addEventListener('click', () => {
-    fade(currentTemplate, 'none', 1);
-    fade(signupTemplate, 'flex', 2);
-});
-
-btnToLoginNav.addEventListener('click', () => {
-    fade(currentTemplate, 'none', 1);
-    fade(loginTemplate, 'flex', 2);
-});
-
-btnToSigninNav.addEventListener('click', () => {
-    fade(currentTemplate, 'none', 1);
-    fade(signupTemplate, 'flex', 2);
-});
-
-btnToLogoutNav.addEventListener('click', () => {
-    localStorage.clear();
-    fade(currentTemplate, 'none', 1);
-    fade(welcomeTemplate, 'flex', 2);
-    buttonIsSession(false);
-});
-// Buttons mod session
-const buttonIsSession = (boolean) => {
-    btnToLoginNav.style.display = boolean ? 'none' : 'block';
-    btnToSigninNav.style.display = boolean ? 'none' : 'block';
-    btnToLogoutNav.style.display = boolean ? 'block' : 'none';
-};
-
-// api
-const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1';
-
-// Request logic
-const request = async (url, method, data, action, token) => {
-    let catchData;
-
-    await fetch(url, {
-        method: method,
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token && `Bearer ${token}`
-        },
-        body: data && JSON.stringify(data())
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'success') {
-                action && action();
-            };
-            console.log(data);
-            catchData = data;
-        });
-    return catchData;
 };
 
 // Verify token
@@ -144,10 +261,14 @@ const verifyToken = async () => {
             token
         );
 
+        console.log(token)
+
         if (result.status === 'success') {
             fade(currentTemplate, 'none', 1);
             fade(manageTemplate, 'grid', 2);
             buttonIsSession(true);
+        } else if (result.status === 'fail') {
+            localStorage.clear();
         };
     };
 };
@@ -190,7 +311,7 @@ const loginData = () => {
 };
 
 const loginActions = () => {
-    fade(loginTemplate, 'none', 2);
+    fade(loginTemplate, 'none', 1);
     fade(manageTemplate, 'grid', 2);
     buttonIsSession(true);
 };
@@ -200,25 +321,17 @@ loginButton.addEventListener('click', async () => {
     localStorage.setItem('token', token.token);
 });
 
-// CLIENTS list Ejecute ---- ↓↓↓ get clients
-const getClientsData = () => {
-    userId
-};
-
-const getClients = async () => {
-    const token = getToken();
-
-    const response = await request(`${apiUrl}/clients`, 'get', null, null, token);
-
-    return response;
-};
-
 // Add clients
 const clientDi = document.getElementById('add_DI');
 const clientName = document.getElementById('add_name');
 const clientLastname = document.getElementById('add_lastname');
 const clientBirthday = document.getElementById('add_birthday');
 const clientEmail = document.getElementById('add_email');
+const clientPhoneOne = document.getElementById('add_phonenumberOne');
+const clientPhoneTwo = document.getElementById('add_phonenumberTwo');
+const clientAddressOne = document.getElementById('add_addressOne');
+const clientAddressTwo = document.getElementById('add_addressTwo');
+const addBtnCancel = document.getElementById('add_cancel');
 const addButton = document.getElementById('btn_add');
 
 const addClientsData = () => {
@@ -227,7 +340,11 @@ const addClientsData = () => {
         name: clientName.value,
         lastname: clientLastname.value,
         birthday: clientBirthday.value,
-        email: clientEmail.value
+        email: clientEmail.value,
+        addressOne: clientAddressOne.value,
+        addressTwo: clientAddressTwo.value,
+        phonenumberOne: clientPhoneOne.value,
+        phonenumberTwo: clientPhoneTwo.value === "" && null,
     };
     return data;
 };
@@ -251,8 +368,62 @@ addButton.addEventListener('click', async () => {
     console.log(response);
 });
 
+addBtnCancel.addEventListener('click', () => {
+    fade(currentTemplate, 'none', 1);
+    fade(manageTemplate, 'grid', 2);
+});
+
+// Ways Button
+const buttonToLogin = document.getElementById('btn_way-login');
+const buttonToSignin = document.getElementById('btn_way-singup');
+const btnToLoginNav = document.getElementById('btn_nav_way-login');
+const btnToSigninNav = document.getElementById('btn_nav_way-singup');
+const btnToLogoutNav = document.getElementById('btn_nav_way-logout');
+const btnToAdd = document.getElementById('add_way');
+
+// actions button ways
+buttonToLogin.addEventListener('click', () => {
+    fade(currentTemplate, 'none', 1);
+    fade(loginTemplate, 'flex', 2);
+});
+
+buttonToSignin.addEventListener('click', () => {
+    fade(currentTemplate, 'none', 1);
+    fade(signupTemplate, 'flex', 2);
+});
+
+btnToLoginNav.addEventListener('click', () => {
+    fade(currentTemplate, 'none', 1);
+    fade(loginTemplate, 'flex', 2);
+});
+
+btnToSigninNav.addEventListener('click', () => {
+    fade(currentTemplate, 'none', 1);
+    fade(signupTemplate, 'flex', 2);
+});
+
+btnToAdd.addEventListener('click', () => {
+    fade(currentTemplate, 'none', 1);
+    fade(addClientsTemp, 'flex', 2);
+});
+
+btnToLogoutNav.addEventListener('click', () => {
+    localStorage.clear();
+    fade(currentTemplate, 'none', 1);
+    fade(welcomeTemplate, 'flex', 2);
+    buttonIsSession(false);
+});
+// Buttons mod session
+const buttonIsSession = (boolean) => {
+    btnToLoginNav.style.display = boolean ? 'none' : 'flex';
+    btnToSigninNav.style.display = boolean ? 'none' : 'flex';
+    btnToLogoutNav.style.display = boolean ? 'flex' : 'none';
+};
+
+
+
 // ------------------------------------------------------------------
 
-display(addClientsTemp, 'flex');
+display(welcomeTemplate, 'flex');
 
 verifyToken();
