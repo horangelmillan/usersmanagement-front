@@ -12,6 +12,7 @@ const detailButtonTemp = document.getElementById('detail_buttons');
 
 // api
 const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1';
+// const apiUrl = 'https://localhost:<<port>>/api/v1';
 
 // Request logic
 const request = async (url, method, data, action, token) => {
