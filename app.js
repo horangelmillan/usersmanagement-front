@@ -21,11 +21,11 @@ const request = async (url, method, data, action, token) => {
 
     await fetch(url, {
         method: method,
-        mode: 'cors',
+        mode: 'no-cors',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token && `Bearer ${token}`,
-            "Access-Control-Allow-Methods": 'patch'
+            "Access-Control-Allow-Methods": 'patch',
         },
         body: data && JSON.stringify(data())
     })
