@@ -24,7 +24,7 @@ const request = async (url, method, data, action, token) => {
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            'Authorization': token && `Bearer ${token}`,
             "Access-Control-Allow-Methods": 'patch'
         },
         body: data && JSON.stringify(data())
@@ -148,14 +148,14 @@ document.addEventListener('click', async (e) => {
 
 
 // EDIT clients
-const clntEditName = document.getElementById('add_name');
-const clntEditLastname = document.getElementById('add_lastname');
-const clntEditEmail = document.getElementById('add_email');
-const clntEditPhoneOne = document.getElementById('add_phonenumberOne');
-const clntEditPhoneTwo = document.getElementById('add_phonenumberTwo');
-const clntEditaddOne = document.getElementById('add_addressOne');
-const clntEditaddTwo = document.getElementById('add_addressTwo');
-const editBtnCancel = document.getElementById('add_cancel');
+const clntEditName = document.getElementById('edit_name');
+const clntEditLastname = document.getElementById('edit_lastname');
+const clntEditEmail = document.getElementById('edit_email');
+const clntEditPhoneOne = document.getElementById('edit_phonenumberOne');
+const clntEditPhoneTwo = document.getElementById('edit_phonenumberTwo');
+const clntEditaddOne = document.getElementById('edit_editressOne');
+const clntEditaddTwo = document.getElementById('edit_editressTwo');
+const editBtnCancel = document.getElementById('edit_cancel');
 
 let currentDetail;
 
