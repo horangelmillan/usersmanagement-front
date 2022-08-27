@@ -12,7 +12,6 @@ const detailButtonTemp = document.getElementById('detail_buttons');
 
 // api
 const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1';
-/* const apiUrl = 'http://localhost:4000/api/v1'; */
 
 // Request logic
 const request = async (url, method, data, action, token) => {
@@ -22,11 +21,11 @@ const request = async (url, method, data, action, token) => {
 
     await fetch(url, {
         method: method,
-        mode: 'no-cors',
+        mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token && `Bearer ${token}`,
-            "Access-Control-Allow-Methods": 'patch',
+            "Access-Control-Allow-Methods": 'patch'
         },
         body: data && JSON.stringify(data())
     })
