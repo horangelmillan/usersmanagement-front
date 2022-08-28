@@ -85,17 +85,6 @@ nav>ul>li #btn_nav_way-logout {
     padding: 0.5rem;
 }
 
-.manager>div:nth-child(1) {
-    border-right: 1px solid rgba(0, 0, 0, 0.205);
-}
-
-.manager>div {
-    display: grid;
-    grid-template-rows: 0.1fr 1fr 0.1fr;
-    padding-left: 0.5rem;
-    justify-content: center;
-}
-
 #list h3,
 .details h3 {
     font-family: 'Jost';
@@ -153,21 +142,54 @@ nav>ul>li #btn_nav_way-logout {
 }
 
 /* Add */
-#add_clients, #edit_clients {
+#add_clients,
+#edit_clients {
     display: none;
     width: 100%;
     height: 100%;
     justify-content: center;
+    flex-direction: column;
 }
 
-#inputs_add, #inputs_edit {
+#edit_clients button,
+#add_clients button {
+    display: block;
+    width: 25%;
+    margin: 1rem auto;
+}
+
+button {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.301);
+    background-color: #ffff;
+    transition: transform 0.5s;
+    padding: 0.5rem;
+}
+
+button:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+#inputs_add,
+#inputs_edit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#inputs_add>div,
+#inputs_edit div {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    width: 100%;
 }
 
-#inputs_add input, #inputs_edit input {
+#inputs_add input,
+#inputs_edit input {
     margin-bottom: 1rem;
 }
 
@@ -181,7 +203,64 @@ nav>ul>li #btn_nav_way-logout {
     overflow-x: hidden;
 }
 
-#list_clients li {
+#transparent {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ffff, transparent, #ffff);
+}
+
+#list_clients>li {
+    list-style: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.336);
+    padding: 1rem;
     margin-bottom: 1rem;
-    width: 50rem;
+    width: 90%;
+    margin: 1rem auto;
+    border-radius: 10px;
+    transition: all 1s;
+}
+
+
+
+#add_way {
+    display: block;
+    width: 20%;
+    height: 2rem;
+    margin: auto;
+}
+
+.edit_button-list,
+.delete_button-list {
+    margin: 0.5rem;
+    transition: all 0.5s;
+}
+
+;
+
+.delete_button-list {
+    transition: all 0.5s;
+}
+
+.delete_button-list:hover {
+    box-shadow: 0 0 13px rgba(255, 0, 0, 0.575);
+    color: red;
+}
+
+.edit_button-list {
+    transition: all 0.5s;
+}
+
+.edit_button-list:hover {
+    box-shadow: 0 0 13px rgba(0, 4, 255, 0.575);
+    color: blue;
+}
+
+#add_way {
+    transition: all 0.5s;
+}
+
+#add_way:hover {
+    box-shadow: 0 0 13px rgba(60, 255, 0, 0.575);
+    color: rgb(0, 255, 21);
 }

@@ -89,7 +89,6 @@ const getClientsAction = (data) => {
             ${client.addressTwo ? `<p><b>Address N°.2: </b>${client.addressTwo}</p>` : ''}
 
             <div>
-                <button class="note_button-list" data-note="${client.id}">notes</button>
                 <button class="edit_button-list" data-edit="${client.id}">Edit</button>
                 <button class="delete_button-list" data-delete="${client.id}">Delete</button>
             </div>
@@ -137,7 +136,12 @@ const clntEditPhoneOne = document.getElementById('edit_phonenumberOne');
 const clntEditPhoneTwo = document.getElementById('edit_phonenumberTwo');
 const clntEditaddOne = document.getElementById('edit_addressOne');
 const clntEditaddTwo = document.getElementById('edit_addressTwo');
-const editBtnCancel = document.getElementById('edit_cancel');
+const editBtnCancel = document.getElementById('btn_edit-cancel');
+
+editBtnCancel.addEventListener('click', () => {
+    fade(currentTemplate, 'none', 1);
+    fade(manageTemplate, 'block', 2);
+});
 
 let currentDetail;
 
@@ -156,7 +160,7 @@ const editClientsData = () => {
 
 const editActions = () => {
     fade(currentTemplate, 'none', 1);
-    fade(manageTemplate, 'grid', 2);
+    fade(manageTemplate, 'block', 2);
 };
 
 const editClients = async (id) => {
@@ -262,7 +266,7 @@ const verifyToken = async () => {
 
         if (result.status === 'success') {
             fade(currentTemplate, 'none', 1);
-            fade(manageTemplate, 'grid', 2);
+            fade(manageTemplate, 'block', 2);
             buttonIsSession(true);
         } else if (result.status === 'fail') {
             localStorage.clear();
@@ -309,7 +313,7 @@ const loginData = () => {
 
 const loginActions = () => {
     fade(loginTemplate, 'none', 1);
-    fade(manageTemplate, 'grid', 2);
+    fade(manageTemplate, 'block', 2);
     buttonIsSession(true);
 };
 
@@ -348,7 +352,7 @@ const addClientsData = () => {
 
 const addActions = () => {
     fade(currentTemplate, 'none', 1);
-    fade(manageTemplate, 'grid', 2);
+    fade(manageTemplate, 'block', 2);
 };
 
 addButton.addEventListener('click', async () => {
@@ -367,7 +371,7 @@ addButton.addEventListener('click', async () => {
 
 addBtnCancel.addEventListener('click', () => {
     fade(currentTemplate, 'none', 1);
-    fade(manageTemplate, 'grid', 2);
+    fade(manageTemplate, 'block', 2);
 });
 
 // Ways Button
