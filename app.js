@@ -10,7 +10,7 @@ const clientsListTemp = document.getElementById('list_template');
 const clientDetailsTemp = document.getElementById('details_template');
 const detailButtonTemp = document.getElementById('detail_buttons');
 
-// api
+// Api
 const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1';
 /* const apiUrl = 'http://clientmanagementapi-env.eba-e2jtfavx.us-east-1.elasticbeanstalk.com/api/v1'; */
 
