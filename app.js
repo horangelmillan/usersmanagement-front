@@ -216,7 +216,7 @@ const display = (element, value) => {
     clearAllFields();
 };
 
-// animation utils
+// Animation utils
 const animationTime = (element, mode, time) => {
     return new Promise((resolve) => {
         setTimeout(() => {
