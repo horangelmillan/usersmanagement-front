@@ -83,6 +83,7 @@ nav>ul>li #btn_nav_way-logout {
     display: none;
     grid-template-columns: 1fr 1fr;
     padding: 0.5rem;
+    transform: all 0.5s;
 }
 
 #list h3,
@@ -165,6 +166,7 @@ button {
     background-color: #ffff;
     transition: transform 0.5s;
     padding: 0.5rem;
+    width: 5rem;
 }
 
 button:hover {
@@ -263,4 +265,16 @@ button:hover {
 #add_way:hover {
     box-shadow: 0 0 13px rgba(60, 255, 0, 0.575);
     color: rgb(0, 255, 21);
+}
+
+#btn_way-login {
+    margin: 1rem 0 3rem 0;
+}
+
+#btn_way-singup {
+    margin-top: 0.5rem;
+}
+
+.error {
+    box-shadow: 0 0 13px rgba(255, 0, 0, 0.575);
 }

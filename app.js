@@ -30,6 +30,9 @@ const request = async (url, method, data, action, token) => {
         .then(data => {
             if (data.status === 'success') {
                 action && action(data);
+
+            } else {
+                errorAnimation();
             };
             catchData = data;
         });
@@ -251,6 +254,13 @@ const fade = async (element, mode, time) => {
     };
 };
 
+const errorAnimation = () => {
+    manageTemplate.setAttribute('class', 'error');
+    setTimeout(() => {
+        manageTemplate.setAttribute('class', '');
+    }, 1000);
+};
+
 // Verify token
 const verifyToken = async () => {
     const token = getToken();
@@ -312,9 +322,9 @@ const loginData = () => {
 };
 
 const loginActions = () => {
-    fade(loginTemplate, 'none', 1);
-    fade(manageTemplate, 'block', 2);
-    buttonIsSession(true);
+        fade(loginTemplate, 'none', 1);
+        fade(manageTemplate, 'block', 2);
+        buttonIsSession(true);
 };
 
 loginButton.addEventListener('click', async () => {
