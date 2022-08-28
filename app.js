@@ -5,10 +5,6 @@ const manageTemplate = document.getElementById('manage_template');
 const welcomeTemplate = document.getElementById('welcome_template');
 const addClientsTemp = document.getElementById('add_clients');
 const editClientsTemp = document.getElementById('edit_clients');
-// Get nested templates
-const clientsListTemp = document.getElementById('list_template');
-const clientDetailsTemp = document.getElementById('details_template');
-const detailButtonTemp = document.getElementById('detail_buttons');
 
 // Api
 const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1';
@@ -81,8 +77,6 @@ const getClientsAction = (data) => {
 
         client.birthday = client.birthday.toDateString();
 
-        console.log(client)
-
         listItem.innerHTML = `
             <p><b>DI: </b>${client.DI}</p>
             <p><b>Full Name: </b>${client.name} ${client.lastname}</p>
@@ -95,7 +89,7 @@ const getClientsAction = (data) => {
             ${client.addressTwo ? `<p><b>Address N°.2: </b>${client.addressTwo}</p>` : ''}
 
             <div>
-                <button class="detail_button-list" data-detail="${client.id}">Details</button>
+                <button class="note_button-list" data-note="${client.id}">notes</button>
                 <button class="edit_button-list" data-edit="${client.id}">Edit</button>
                 <button class="delete_button-list" data-delete="${client.id}">Delete</button>
             </div>
@@ -134,21 +128,6 @@ document.addEventListener('click', async (e) => {
         console.log('deleted', id)
     };
 });
-
-// DETAILS show client
-document.addEventListener('click', async (e) => {
-    if (e.target.className === 'detail_button-list') {
-
-        const token = getToken();
-
-        const id = e.target.dataset.detail;
-
-        console.log(id);
-
-        await request(`${apiUrl}/clients/${id}`, 'GET', null, null, token);
-    };
-});
-
 
 // EDIT clients
 const clntEditName = document.getElementById('edit_name');
@@ -210,6 +189,22 @@ document.addEventListener('click', async (e) => {
     };
 });
 
+const setEditInputsCLient = async () => {
+    const token = getToken();
+
+    const response = await request(`${apiUrl}/clients/${currentDetail}`, 'GET', null, null, token);
+
+    const client = response.client;
+
+    clntEditName.value = client.name;
+    clntEditLastname.value = client.lastname;
+    clntEditEmail.value = client.email;
+    clntEditaddOne.value = client.addressOne;
+    clntEditaddTwo.value = client.addressTwo;
+    clntEditPhoneOne.value = client.phonenumberOne;
+    clntEditPhoneTwo.value = client.phonenumberTwo;
+};
+
 // Display templates
 const display = (element, value) => {
     element.style.display = value;
@@ -238,10 +233,11 @@ const fade = async (element, mode, time) => {
         element.style.opacity = 0;
         // wait for element animation of current element to finish for execute actions
         setTimeout(() => {
-
             element.style.opacity = 1;
             if (element === manageTemplate) {
                 getClients();
+            } else if (element === editClientsTemp) {
+                setEditInputsCLient();
             };
         }, time);
     } else {
@@ -263,8 +259,6 @@ const verifyToken = async () => {
             null,
             token
         );
-
-        console.log(token)
 
         if (result.status === 'success') {
             fade(currentTemplate, 'none', 1);

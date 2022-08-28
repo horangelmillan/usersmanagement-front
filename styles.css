@@ -185,3 +185,9 @@ nav>ul>li #btn_nav_way-logout {
     margin-bottom: 1rem;
     width: 50rem;
 }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
