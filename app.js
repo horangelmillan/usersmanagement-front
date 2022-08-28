@@ -5,6 +5,7 @@ const manageTemplate = document.getElementById('manage_template');
 const welcomeTemplate = document.getElementById('welcome_template');
 const addClientsTemp = document.getElementById('add_clients');
 const editClientsTemp = document.getElementById('edit_clients');
+const consolaTemplate = document.getElementById('consola');
 
 // Api
 const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1';
@@ -30,10 +31,10 @@ const request = async (url, method, data, action, token) => {
         .then(data => {
             if (data.status === 'success') {
                 action && action(data);
-
-            } else {
+            } else if (data.status === 'fail') {
                 errorAnimation();
             };
+            console.log(data);
             catchData = data;
         });
     return catchData;
@@ -255,10 +256,10 @@ const fade = async (element, mode, time) => {
 };
 
 const errorAnimation = () => {
-    manageTemplate.setAttribute('class', 'error');
+    consolaTemplate.style.boxShadow = '0px 0px 13px rgba(255, 0, 0, 0.575)';
     setTimeout(() => {
-        manageTemplate.setAttribute('class', '');
-    }, 1000);
+        consolaTemplate.style.boxShadow = '';
+    }, 500);
 };
 
 // Verify token
@@ -321,11 +322,17 @@ const loginData = () => {
     return data;
 };
 
-const loginActions = () => {
+const loginActions = (data) => {
+    if (data.status === 'success') {
         fade(loginTemplate, 'none', 1);
         fade(manageTemplate, 'block', 2);
         buttonIsSession(true);
+    } else {
+        errorAnimation();
+    };
 };
+
+
 
 loginButton.addEventListener('click', async () => {
     const token = await request(`${apiUrl}/users/login`, 'POST', loginData, loginActions);

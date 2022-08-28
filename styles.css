@@ -275,6 +275,6 @@ button:hover {
     margin-top: 0.5rem;
 }
 
-.error {
-    box-shadow: 0 0 13px rgba(255, 0, 0, 0.575);
+#consola {
+    transition: all 0.3s;
 }
