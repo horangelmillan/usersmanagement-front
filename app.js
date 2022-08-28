@@ -11,8 +11,8 @@ const clientDetailsTemp = document.getElementById('details_template');
 const detailButtonTemp = document.getElementById('detail_buttons');
 
 // api
-/* const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1'; */
-const apiUrl = 'http://localhost:4000/api/v1';
+const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1';
+/* const apiUrl = 'http://clientmanagementapi-env.eba-e2jtfavx.us-east-1.elasticbeanstalk.com/api/v1'; */
 
 // Request logic
 const request = async (url, method, data, action, token) => {
@@ -81,6 +81,8 @@ const getClientsAction = (data) => {
 
         client.birthday = client.birthday.toDateString();
 
+        console.log(client)
+
         listItem.innerHTML = `
             <p><b>DI: </b>${client.DI}</p>
             <p><b>Full Name: </b>${client.name} ${client.lastname}</p>
@@ -107,7 +109,7 @@ const getClientsAction = (data) => {
 const getClients = async () => {
     const token = getToken();
 
-    const response = await request(`${apiUrl}/clients`, 'get', null, getClientsAction, token);
+    const response = await request(`${apiUrl}/clients`, 'GET', null, getClientsAction, token);
 
     return response;
 };
@@ -116,7 +118,7 @@ const getClients = async () => {
 const deleteClient = async (id) => {
     const token = getToken();
 
-    const result = request(`${apiUrl}/clients/${id}`, 'delete', null, null, token);
+    const result = request(`${apiUrl}/clients/${id}`, 'DELETE', null, null, token);
 
     console.log(result);
 };
@@ -127,7 +129,7 @@ document.addEventListener('click', async (e) => {
 
         const token = getToken();
 
-        await request(`${apiUrl}/clients/${id}`, 'delete', null, getClients, token);
+        await request(`${apiUrl}/clients/${id}`, 'DELETE', null, getClients, token);
 
         console.log('deleted', id)
     };
@@ -143,7 +145,7 @@ document.addEventListener('click', async (e) => {
 
         console.log(id);
 
-        await request(`${apiUrl}/clients/${id}`, 'get', null, null, token);
+        await request(`${apiUrl}/clients/${id}`, 'GET', null, null, token);
     };
 });
 
@@ -165,10 +167,10 @@ const editClientsData = () => {
         name: clntEditName.value != '' ? clntEditName.value : undefined,
         lastname: clntEditLastname.value != '' ? clntEditLastname.value : undefined,
         email: clntEditEmail.value != '' ? clntEditEmail.value : undefined,
-        addressOne: clntEditPhoneOne.value != '' ? clntEditPhoneOne.value : undefined,
-        addressTwo: clntEditPhoneTwo.value != '' ? clntEditPhoneTwo.value : undefined,
-        phonenumberOne: clntEditaddOne.value != '' ? clntEditaddOne.value : undefined,
-        phonenumberTwo: clntEditaddTwo.value != '' ? clntEditaddTwo.value : undefined,
+        addressOne: clntEditaddOne.value != '' ? clntEditaddOne.value : undefined,
+        addressTwo: clntEditaddTwo.value != '' ? clntEditaddTwo.value : undefined,
+        phonenumberOne: clntEditPhoneOne.value != '' ? clntEditPhoneOne.value : undefined,
+        phonenumberTwo: clntEditPhoneTwo.value != '' ? clntEditPhoneTwo.value : undefined,
     };
     return data;
 };
@@ -185,7 +187,7 @@ const editClients = async (id) => {
 
     const response = await request(
         `${apiUrl}/clients/${id}`,
-        'patch',
+        'PATCH',
         editClientsData,
         editActions,
         token
@@ -256,7 +258,7 @@ const verifyToken = async () => {
     if (token) {
         const result = await request(
             `${apiUrl}/users`,
-            'get',
+            'GET',
             null,
             null,
             token
@@ -295,7 +297,7 @@ const signupAction = () => {
 };
 
 signupButton.addEventListener('click', () => {
-    request(`${apiUrl}/users/signup`, 'post', signupData, signupAction);
+    request(`${apiUrl}/users/signup`, 'POST', signupData, signupAction);
 });
 
 // LOGIN ejecute
@@ -318,7 +320,7 @@ const loginActions = () => {
 };
 
 loginButton.addEventListener('click', async () => {
-    const token = await request(`${apiUrl}/users/login`, 'post', loginData, loginActions);
+    const token = await request(`${apiUrl}/users/login`, 'POST', loginData, loginActions);
     localStorage.setItem('token', token.token);
 });
 
@@ -345,7 +347,7 @@ const addClientsData = () => {
         addressOne: clientAddressOne.value,
         addressTwo: clientAddressTwo.value,
         phonenumberOne: clientPhoneOne.value,
-        phonenumberTwo: clientPhoneTwo.value === "" && null,
+        phonenumberTwo: clientPhoneTwo.value
     };
     return data;
 };
@@ -360,7 +362,7 @@ addButton.addEventListener('click', async () => {
 
     const response = await request(
         `${apiUrl}/clients`,
-        'post',
+        'POST',
         addClientsData,
         addActions,
         token
