@@ -8,8 +8,7 @@ const editClientsTemp = document.getElementById('edit_clients');
 const consolaTemplate = document.getElementById('consola');
 
 // Api
-const apiUrl = 'https://usersmanagement-api.herokuapp.com/api/v1';
-/* const apiUrl = 'http://clientmanagementapi-env.eba-e2jtfavx.us-east-1.elasticbeanstalk.com/api/v1'; */
+const apiUrl = 'usersmanagement-api-production.up.railway.app/api/v1';
 
 // Request logic
 const request = async (url, method, data, action, token) => {
