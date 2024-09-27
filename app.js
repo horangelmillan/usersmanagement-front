@@ -8,7 +8,8 @@ const editClientsTemp = document.getElementById('edit_clients');
 const consolaTemplate = document.getElementById('consola');
 
 // Api
-const apiUrl = 'usersmanagement-api-production.up.railway.app/api/v1';
+const apiUrl = 'http://localhost:3000/api/v1';
+//usersmanagement-api-production.up.railway.app/api/v1
 
 // Request logic
 const request = async (url, method, data, action, token) => {
@@ -28,11 +29,31 @@ const request = async (url, method, data, action, token) => {
     })
         .then(res => res.json())
         .then(data => {
+
             if (data.status === 'success') {
                 action && action(data);
+
+                if (data?.message) openPopup('Success', data?.message);
+                
             } else if (data.status === 'fail') {
-                errorAnimation();
+
+                if (data?.error?.name === 'TokenExpiredError') {
+                    errorAnimation();
+                    localStorage.clear();
+                }
+
+                if (currentTemplate !== loginTemplate) {
+                    fade(currentTemplate, 'none', 1);
+                    fade(loginTemplate, 'flex', 2);
+                }
+                
+                buttonIsSession(false);
+
+                localStorage.clear();
+
+                openPopup('Error', (data?.message || 'Ocurrió un error'));
             };
+
             console.log(data);
             catchData = data;
         });
@@ -196,10 +217,14 @@ document.addEventListener('click', async (e) => {
     };
 });
 
-const setEditInputsCLient = async () => {
+const setEditInputsClient = async () => {
     const token = getToken();
 
     const response = await request(`${apiUrl}/clients/${currentDetail}`, 'GET', null, null, token);
+
+    if (response.status === 'fail') {
+        return;
+    }
 
     const client = response.client;
 
@@ -244,7 +269,7 @@ const fade = async (element, mode, time) => {
             if (element === manageTemplate) {
                 getClients();
             } else if (element === editClientsTemp) {
-                setEditInputsCLient();
+                setEditInputsClient();
             };
         }, time);
     } else {
@@ -255,7 +280,7 @@ const fade = async (element, mode, time) => {
 };
 
 const errorAnimation = () => {
-    consolaTemplate.style.boxShadow = '0px 0px 13px rgba(255, 0, 0, 0.575)';
+    consolaTemplate.style.boxShadow = '0px 0px 13px rgba(255, 0, 0, 0.800)';
     setTimeout(() => {
         consolaTemplate.style.boxShadow = '';
     }, 500);
@@ -279,6 +304,15 @@ const verifyToken = async () => {
             fade(manageTemplate, 'block', 2);
             buttonIsSession(true);
         } else if (result.status === 'fail') {
+
+            if (result?.error?.name === 'TokenExpiredError') {
+                errorAnimation();
+                localStorage.clear
+            }
+
+            fade(currentTemplate, 'none', 1);
+            fade(loginTemplate, 'flex', 2);
+
             localStorage.clear();
         };
     };
@@ -400,6 +434,7 @@ const btnToAdd = document.getElementById('add_way');
 
 // actions button ways
 buttonToLogin.addEventListener('click', () => {
+    if (currentTemplate === loginTemplate) return;
     fade(currentTemplate, 'none', 1);
     fade(loginTemplate, 'flex', 2);
 });
@@ -410,6 +445,7 @@ buttonToSignin.addEventListener('click', () => {
 });
 
 btnToLoginNav.addEventListener('click', () => {
+    if (currentTemplate === loginTemplate) return;
     fade(currentTemplate, 'none', 1);
     fade(loginTemplate, 'flex', 2);
 });
@@ -436,6 +472,41 @@ const buttonIsSession = (boolean) => {
     btnToSigninNav.style.display = boolean ? 'none' : 'flex';
     btnToLogoutNav.style.display = boolean ? 'flex' : 'none';
 };
+
+// ------------------------------------------------------------------
+
+// Función para abrir el popup
+function openPopup(title, message) {
+    const popupContainer = document.getElementById('popup-container');
+
+    // Crea el div del popup
+    const popup = document.createElement('div');
+    popup.classList.add('popup');
+
+    // Crea el contenido del popup
+    popup.innerHTML = `
+        <span class="popup-close">&times;</span>
+        <h2 class="popup-title">${title}</h2>
+        <p class="popup-message">${message}</p>
+        <button class="popup-ok-button">OK</button>
+    `;
+
+    // Añade el popup al contenedor
+    popupContainer.appendChild(popup);
+
+    // Función para cerrar el popup
+    const closePopup = () => {
+        popup.classList.add('fade-out');
+        setTimeout(() => popup.remove(), 500); // Desvanecerlo y luego removerlo
+    };
+
+    // Cerrar popup al hacer clic en el botón OK o el botón de cerrar
+    popup.querySelector('.popup-ok-button').addEventListener('click', closePopup);
+    popup.querySelector('.popup-close').addEventListener('click', closePopup);
+
+    // Hacer que el popup se desvanezca automáticamente después de 5 segundos
+    setTimeout(closePopup, 5000);
+}
 
 
 

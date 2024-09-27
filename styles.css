@@ -46,8 +46,14 @@ nav>ul>li {
 }
 
 nav a {
+    cursor: pointer;
+    pointer-events: all;
     white-space: nowrap;
     margin-right: 2rem;
+}
+
+a {
+    white-space: nowrap;
 }
 
 nav>ul>li #btn_nav_way-logout {
@@ -160,6 +166,7 @@ nav>ul>li #btn_nav_way-logout {
 }
 
 button {
+    white-space: nowrap;
     border-radius: 10px;
     border: none;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.301);
@@ -183,6 +190,7 @@ button:hover {
 
 #inputs_add>div,
 #inputs_edit div {
+    padding: 0em 1.5em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -277,4 +285,171 @@ button:hover {
 
 #consola {
     transition: all 0.3s;
+}
+
+/* General reset for inputs */
+input {
+    font-family: 'Jost', sans-serif;
+    padding: 10px;
+    margin: 8px 0;
+    border: 2px solid #ccc;
+    border-radius: 25px;
+    /* Hace los inputs redondeados */
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    outline: none;
+}
+
+input:focus {
+    border-color: #007bff;
+    /* Color de borde al hacer focus */
+    background-color: #fff;
+    /* Cambia el fondo al hacer focus */
+}
+
+button {
+    font-family: 'Jost', sans-serif;
+    padding: 10px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 25px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    /* Color del botón al pasar el mouse */
+}
+
+/* Para los botones de acción (Agregar, Editar, Cancelar) */
+button#btn_add,
+button#btn_edit,
+button#add_cancel,
+button#btn_edit-cancel {
+    padding: 12px 30px;
+    border-radius: 25px;
+    background-color: #28a745;
+    /* Color verde */
+    color: white;
+}
+
+button#btn_add:hover,
+button#btn_edit:hover,
+button#add_cancel:hover,
+button#btn_edit-cancel:hover {
+    background-color: #218838;
+    /* Verde más oscuro al hover */
+}
+
+/* Input container layout */
+#inputs_add div,
+#inputs_edit div {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 5px 0;
+    font-weight: 500;
+}
+
+/* Estilo general para inputs */
+input {
+    font-family: 'Jost', sans-serif;
+    font-size: 16px; /* Aumenta el tamaño del texto */
+    padding: 15px; /* Aumenta el padding para hacer los inputs más grandes */
+    margin: 10px 0;
+    border: 2px solid #ccc;
+    border-radius: 25px; /* Bordes redondeados */
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    outline: none;
+}
+
+input:focus {
+    border-color: #007bff; /* Cambia el color del borde al hacer focus */
+    background-color: #fff; /* Fondo blanco al hacer focus */
+}
+
+/* Popup Container for multiple popups */
+.popup-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacio entre cada popup */
+}
+
+/* Popup Content */
+.popup {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateY(0); /* Efecto de subida */
+}
+
+/* Fadeout Animation */
+.popup.fade-out {
+    opacity: 0;
+    transform: translateY(-20px); /* Desvanecerse y subir */
+}
+
+/* Close Button */
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+}
+
+.popup-close:hover {
+    color: #007bff;
+}
+
+/* Popup Title */
+.popup-title {
+    font-family: 'Jost', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Popup Message */
+.popup-message {
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* OK Button */
+.popup-ok-button {
+    font-family: 'Jost', sans-serif;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.popup-ok-button:hover {
+    background-color: #218838;
 }
