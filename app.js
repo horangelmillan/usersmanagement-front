@@ -33,24 +33,24 @@ const request = async (url, method, data, action, token) => {
                 action && action(data);
 
                 if (data?.message) openPopup('Success', data?.message);
-                
+
             } else if (data.status === 'fail') {
 
                 if (data?.error?.name === 'TokenExpiredError') {
                     errorAnimation();
                     localStorage.clear();
+
+                    if (currentTemplate !== loginTemplate) {
+                        fade(currentTemplate, 'none', 1);
+                        fade(loginTemplate, 'flex', 2);
+                    }
+
+                    buttonIsSession(false);
+
+                    localStorage.clear();
+
+                    openPopup('Error', (data?.message || 'Ocurrió un error'));
                 }
-
-                if (currentTemplate !== loginTemplate) {
-                    fade(currentTemplate, 'none', 1);
-                    fade(loginTemplate, 'flex', 2);
-                }
-                
-                buttonIsSession(false);
-
-                localStorage.clear();
-
-                openPopup('Error', (data?.message || 'Ocurrió un error'));
             };
 
             console.log(data);
