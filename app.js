@@ -35,9 +35,9 @@ const request = async (url, method, data, action, token) => {
                 if (data?.message) openPopup('Success', data?.message);
 
             } else if (data.status === 'fail') {
-
+                errorAnimation();
+                
                 if (data?.error?.name === 'TokenExpiredError') {
-                    errorAnimation();
                     localStorage.clear();
 
                     if (currentTemplate !== loginTemplate) {
@@ -48,9 +48,9 @@ const request = async (url, method, data, action, token) => {
                     buttonIsSession(false);
 
                     localStorage.clear();
-
-                    openPopup('Error', (data?.message || 'Ocurrió un error'));
                 }
+
+                openPopup('Error', (data?.message || 'Ocurrió un error'));
             };
 
             console.log(data);
