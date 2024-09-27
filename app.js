@@ -8,8 +8,7 @@ const editClientsTemp = document.getElementById('edit_clients');
 const consolaTemplate = document.getElementById('consola');
 
 // Api
-const apiUrl = 'http://localhost:3000/api/v1';
-//usersmanagement-api-production.up.railway.app/api/v1
+const apiUrl = 'usersmanagement-api-production.up.railway.app/api/v1';
 
 // Request logic
 const request = async (url, method, data, action, token) => {
